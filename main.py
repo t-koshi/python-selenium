@@ -1,13 +1,11 @@
 import datetime
-import logging
 import os
+import json
 
 from flask import Flask
+from flask import *
 
 from fx_rate.utility import get_fx_rate
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
@@ -17,9 +15,12 @@ def get():
     usd_jpy = get_fx_rate()
     res = 'timestamp={}, USDJPY={}'.format(
         datetime.datetime.utcnow() + datetime.timedelta(hours=9), usd_jpy)
-    logger.info(res)
-    return res, 200
-
+    params = {
+        'id':coupon_code,
+        'title':benefit,
+        'value':usd_jpy
+    }
+    return jsonify(params)
 
 if __name__ == '__main__':
     host = os.getenv('HOST', '0.0.0.0')
